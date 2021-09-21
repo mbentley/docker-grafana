@@ -2,9 +2,7 @@
 
 # get version from GitHub releases
 echo -n "Getting version from GitHub releases..."
-#GRAFANA_VERSION="$(wget -q -O - https://api.github.com/repos/grafana/grafana/releases/latest | jq -r .tag_name)"
-#GRAFANA_VERSION="v8.1.5-beta2"
-GRAFANA_VERSION="v8.1.5"
+GRAFANA_VERSION="$(wget -q -O - https://api.github.com/repos/grafana/grafana/releases/latest | jq -r .tag_name)"
 
 # check to see if we received a grafana version from github tags
 if [ -z "${GRAFANA_VERSION}" ]
