@@ -1,5 +1,10 @@
 #!/bin/bash
 
+set -e 
+
+# set expected major.minor tag
+EXPECTED_TAG="8.1"
+
 # get version from GitHub releases
 echo -n "Getting version from GitHub releases..."
 GRAFANA_VERSION="$(wget -q -O - https://api.github.com/repos/grafana/grafana/releases/latest | jq -r .tag_name)"
@@ -50,6 +55,13 @@ MAJOR_MINOR_TAG="$(echo "${GRAFANA_VERSION}" | awk -F 'v' '{print $2}' | awk -F 
 if [ -z "${MAJOR_MINOR_TAG}" ]
 then
   echo "ERROR: MAJOR_MINOR_TAG not set!"
+  exit 1
+fi
+
+# check to see if the major.minor tag is no longer the value of EXPECTED_TAG
+if [ "${MAJOR_MINOR_TAG}" != "${EXPECTED_TAG}" ]
+then
+  echo "ERROR: the major.minor tag is no longer ${EXPECTED_TAG}; we found ${TRIMMED_TAG}!"
   exit 1
 fi
 
