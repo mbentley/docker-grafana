@@ -67,7 +67,7 @@ fi
 
 # clear any existing manifests, create the new manifest, and push the manifest
 echo "Clearing existing manifests, create new manifest and push to Docker Hub..."
-docker manifest rm "mbentley/grafana:${MAJOR_MINOR_TAG}"
+docker manifest rm "mbentley/grafana:${MAJOR_MINOR_TAG}" || true
 docker manifest create "mbentley/grafana:${MAJOR_MINOR_TAG}" --amend "grafana/grafana@${TAG_DIGEST}"
 docker manifest push "mbentley/grafana:${MAJOR_MINOR_TAG}"
 
