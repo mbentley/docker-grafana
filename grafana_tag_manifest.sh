@@ -1,9 +1,9 @@
 #!/bin/bash
 
-set -e 
+set -e
 
 # set expected major.minor tag
-EXPECTED_TAG="8.1"
+EXPECTED_TAG="8.2"
 
 # get version from GitHub releases
 echo -n "Getting version from GitHub releases..."
