@@ -7,7 +7,7 @@ EXPECTED_TAG="8.2"
 
 # get version from GitHub releases
 echo -n "Getting version from GitHub releases..."
-GRAFANA_VERSION="$(wget -q -O - https://api.github.com/repos/grafana/grafana/releases/latest | jq -r .tag_name)"
+GRAFANA_VERSION="$(wget -q -O - https://api.github.com/repos/grafana/grafana/releases | jq -r '.[] | select(.tag_name | contains("-beta") | not) | .tag_name' | head -n 1)"
 
 # check to see if we received a grafana version from github tags
 if [ -z "${GRAFANA_VERSION}" ]
@@ -66,8 +66,9 @@ then
 fi
 
 # clear any existing manifests, create the new manifest, and push the manifest
-echo "Clearing existing manifests, create new manifest and push to Docker Hub..."
-docker manifest rm "mbentley/grafana:${MAJOR_MINOR_TAG}" || true
+echo "Create new manifest and push to Docker Hub..."
+#echo "Clearing existing manifests, create new manifest and push to Docker Hub..."
+#docker manifest rm "mbentley/grafana:${MAJOR_MINOR_TAG}" || true
 docker manifest create "mbentley/grafana:${MAJOR_MINOR_TAG}" --amend "grafana/grafana@${TAG_DIGEST}"
 docker manifest push "mbentley/grafana:${MAJOR_MINOR_TAG}"
 
