@@ -3,7 +3,7 @@
 set -e
 
 # set expected major.minor tag
-EXPECTED_TAG="8.2"
+EXPECTED_TAG="8.3"
 
 # get version from GitHub releases
 echo -n "Getting version from GitHub releases..."
