@@ -6,7 +6,7 @@ set -e
 EXPECTED_TAGS="3.2 3.3"
 
 # get last 100 release tags from GitHub; filter out beta releases
-GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-image-renderer/releases?per_page=100" | jq -r '.[] | select(.tag_name | contains("-beta") | not) | .tag_name')"
+GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-image-renderer/tags?per_page=100" | jq -r '.[] | select(.name | contains("-beta") | not) | select(.name | startswith("v3")) | .name')"
 
 # loop through each tag
 for EXPECTED_TAG in ${EXPECTED_TAGS}
