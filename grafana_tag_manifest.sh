@@ -6,14 +6,14 @@ set -e
 EXPECTED_TAGS="8.0 8.1 8.2 8.3"
 
 # get last 100 release tags from GitHub; filter out beta releases
-GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana/tags?per_page=100" | jq -r '.[] | select(.name | contains("-beta") | not) | select(.name | startswith("v8")) | .name')"
+GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana/tags?per_page=100" | jq -r '.[] | select(.name | contains("-beta") | not) | select(.name | startswith("v8")) | .name' | sort --version-sort -r)"
 
 # loop through each tag
 for EXPECTED_TAG in ${EXPECTED_TAGS}
 do
   # get latest full version from GitHub releases
   echo -n "Getting full version for ${EXPECTED_TAG} from GitHub releases..."
-  GRAFANA_VERSION="$(echo "${GRAFANA_RELEASES}" | grep "^v${EXPECTED_TAG}." | head -n 1)"
+  GRAFANA_VERSION="$(echo "${GRAFANA_RELEASES}" | grep "^v${EXPECTED_TAG}\." | head -n 1)"
 
   # check to see if we received a grafana version from github tags
   if [ -z "${GRAFANA_VERSION}" ]
