@@ -3,7 +3,7 @@
 set -e
 
 # set expected major.minor tags
-EXPECTED_TAGS="3.0 3.1 3.2 3.3"
+EXPECTED_TAGS="3.0 3.1 3.2 3.3 3.4"
 
 # get last 100 release tags from GitHub; filter out beta releases
 GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-image-renderer/tags?per_page=100" | jq -r '.[] | select(.name | contains("-beta") | not) | select(.name | startswith("v3")) | .name' | sort --version-sort -r)"
