@@ -6,7 +6,7 @@ docker image for Grafana & Grafana image renderer; direct mirrors of `grafana/gr
 
 ### `mbentley/grafana`
 
-* `8.4`, `8.3`, `8.2`, `8.1`, `8.0`
+* `8.5`, `8.4`, `8.3`, `8.2`, `8.1`, `8.0`
 
 ### `mbentley/grafana-image-renderer`
 
