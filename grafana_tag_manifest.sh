@@ -5,8 +5,8 @@ set -e
 # set expected major.minor tags
 EXPECTED_TAGS="8.0 8.1 8.2 8.3 8.4 8.5 9.0"
 
-# get last 100 release tags from GitHub; filter out beta releases
-GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana/tags?per_page=100" | jq -r '.[] | select(.name | contains("-beta") | not) | select(.name | startswith("v8")) | .name' | sort --version-sort -r)"
+# get last 100 release tags from GitHub; filter out beta releases & only v8 or v9
+GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana/tags?per_page=100" | jq -r '.[] | select(.name | contains("-beta") | not) | select((.name | startswith("v8")) or (.name | startswith("v9"))) | .name' | sort --version-sort -r)"
 
 # loop through each tag
 for EXPECTED_TAG in ${EXPECTED_TAGS}
