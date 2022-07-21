@@ -58,7 +58,7 @@ tag_manifest() {
 
   # clear any existing manifests, create the new manifest, and push the manifest
   echo "Clearing existing manifests, create new manifest and push to Docker Hub..."
-  docker manifest rm "mbentley/grafana-image-renderer:${MAJOR_MINOR_TAG}" || true
+  docker manifest rm "mbentley/grafana-image-renderer:${MAJOR_MINOR_TAG}" 2>/dev/null || true
   docker manifest create "mbentley/grafana-image-renderer:${MAJOR_MINOR_TAG}" --amend "grafana/grafana-image-renderer:${TRIMMED_TAG}"
   docker manifest push --purge "mbentley/grafana-image-renderer:${MAJOR_MINOR_TAG}"
 
