@@ -5,12 +5,10 @@ set -e
 # set expected major.minor tags
 EXPECTED_TAGS="3.4 3.5"
 
-# get last 100 release tags from GitHub; filter out beta releases
-GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-image-renderer/tags?per_page=100" | jq -r '.[] | select(.name | contains("-beta") | not) | select(.name | startswith("v3")) | .name' | sort --version-sort -r)"
+tag_manifest() {
+  # get expected tag from first argument
+  EXPECTED_TAG="${1}"
 
-# loop through each tag
-for EXPECTED_TAG in ${EXPECTED_TAGS}
-do
   # get latest full version from GitHub releases
   echo -n "Getting full version for ${EXPECTED_TAG} from GitHub releases..."
   GRAFANA_VERSION="$(echo "${GRAFANA_RELEASES}" | grep "^v${EXPECTED_TAG}\." | head -n 1)"
@@ -65,5 +63,15 @@ do
   docker manifest push --purge "mbentley/grafana-image-renderer:${MAJOR_MINOR_TAG}"
 
   echo -e "done\n"
-done
+}
 
+
+# get last 100 release tags from GitHub; filter out beta releases
+GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-image-renderer/tags?per_page=100" | jq -r '.[] | select(.name | contains("-beta") | not) | select(.name | startswith("v3")) | .name' | sort --version-sort -r)"
+
+# load env_parallel
+. "$(which env_parallel.bash)"
+
+# run multiple scans in parallel
+# shellcheck disable=SC2086
+env_parallel -j 4 tag_manifest ::: ${EXPECTED_TAGS}
