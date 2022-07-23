@@ -70,7 +70,7 @@ tag_manifest() {
 GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-image-renderer/tags?per_page=100" | jq -r '.[] | select(.name | contains("-beta") | not) | select(.name | startswith("v3")) | .name' | sort --version-sort -r)"
 
 # load env_parallel
-. "$(which env_parallel.bash)"
+. "$(command -v env_parallel.bash)"
 
 # run multiple scans in parallel
 # shellcheck disable=SC2086
