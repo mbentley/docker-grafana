@@ -67,7 +67,7 @@ tag_manifest() {
 
 
 # get last 100 release tags from GitHub; filter out beta releases
-GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-image-renderer/tags?per_page=100" | jq -r '.[] | select(.name | contains("-beta") | not) | select(.name | startswith("v3")) | .name' | sort --version-sort -r)"
+GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-image-renderer/tags?per_page=100" | jq -r '.[] | select(.name | contains("-") | not) | select(.name | startswith("v3")) | .name' | sort --version-sort -r)"
 
 # load env_parallel
 . "$(command -v env_parallel.bash)"
