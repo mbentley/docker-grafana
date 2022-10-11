@@ -16,7 +16,7 @@ tag_manifest() {
   # check to see if we received a grafana version from github tags
   if [ -z "${GRAFANA_VERSION}" ]
   then
-    echo -e "error\nERROR: unable to retrieve the Grafana Image Renderer version from GitHub"
+    echo -e "error\nERROR: unable to retrieve the Grafana Image Renderer version from GitHub\n"
     exit 1
   fi
 
@@ -25,7 +25,7 @@ tag_manifest() {
   # check to see if this is a non-GA version
   if [ -n "$(echo "${GRAFANA_VERSION}" | awk -F '-' '{print $2}')" ]
   then
-    echo "ERROR: non-GA version ${GRAFANA_VERSION} found!"
+    echo -e "ERROR: non-GA version ${GRAFANA_VERSION} found!\n"
     exit 1
   fi
 
@@ -35,7 +35,7 @@ tag_manifest() {
   # check to see if we got a trimmed tag
   if [ -z "${TRIMMED_TAG}" ]
   then
-    echo "ERROR: TRIMMED_TAG not set!"
+    echo -e "ERROR: TRIMMED_TAG not set!\n"
     exit 1
   fi
 
@@ -45,14 +45,14 @@ tag_manifest() {
   # check to see if we got a tag digest
   if [ -z "${MAJOR_MINOR_TAG}" ]
   then
-    echo "ERROR: MAJOR_MINOR_TAG not set!"
+    echo -e "ERROR: MAJOR_MINOR_TAG not set!\n"
     exit 1
   fi
 
   # check to see if the major.minor tag is no longer the value of EXPECTED_TAG
   if [ "${MAJOR_MINOR_TAG}" != "${EXPECTED_TAG}" ]
   then
-    echo "ERROR: the major.minor tag is no longer ${EXPECTED_TAG}; we found ${TRIMMED_TAG}!"
+    echo -e "ERROR: the major.minor tag is no longer ${EXPECTED_TAG}; we found ${TRIMMED_TAG}!\n"
     exit 1
   fi
 
