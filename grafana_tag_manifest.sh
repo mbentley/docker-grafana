@@ -70,7 +70,7 @@ tag_manifest() {
   fi
 
   # create the new manifest and push the manifest to docker hub
-  echo "Create new manifest and push to Docker Hub..."
+  echo -n "Create new manifest and push to Docker Hub..."
   docker buildx imagetools create --progress plain -t "mbentley/grafana:${MAJOR_MINOR_TAG}" "grafana/grafana@${TAG_DIGEST}"
 
   echo -e "done\n"
