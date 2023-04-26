@@ -41,7 +41,7 @@ tag_manifest() {
 
   # get digest for image
   echo -n "Getting digest for grafana/grafana:${TRIMMED_TAG} from Docker Hub..."
-  TAG_DIGEST="$(docker manifest inspect "grafana/grafana:${TRIMMED_TAG}" | jq -r '.manifests | .[] | select((.platform.architecture == "amd64") and (.platform.os == "linux")) | .digest')"
+  TAG_DIGEST="$(docker buildx imagetools inspect --raw "grafana/grafana:${TRIMMED_TAG}" | jq -r '.manifests | .[] | select((.platform.architecture == "amd64") and (.platform.os == "linux")) | .digest')"
 
   # check to see if we got a tag digest
   if [ -z "${TAG_DIGEST}" ]
@@ -69,11 +69,9 @@ tag_manifest() {
     exit 1
   fi
 
-  # clear any existing manifests, create the new manifest, and push the manifest
-  echo "Clearing existing manifests, create new manifest and push to Docker Hub..."
-  docker manifest rm "mbentley/grafana:${MAJOR_MINOR_TAG}" 2>/dev/null || true
-  docker manifest create "mbentley/grafana:${MAJOR_MINOR_TAG}" --amend "grafana/grafana@${TAG_DIGEST}"
-  docker manifest push --purge "mbentley/grafana:${MAJOR_MINOR_TAG}"
+  # create the new manifest and push the manifest to docker hub
+  echo "Create new manifest and push to Docker Hub..."
+  docker buildx imagetools create --progress plain -t "mbentley/grafana:${MAJOR_MINOR_TAG}" "grafana/grafana@${TAG_DIGEST}"
 
   echo -e "done\n"
 }
