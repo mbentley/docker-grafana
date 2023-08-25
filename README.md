@@ -14,9 +14,9 @@ docker image for Grafana & Grafana image renderer; direct mirrors of `grafana/gr
 ### `mbentley/grafana-image-renderer`
 
 * Daily updates:
-    * `3.7`, `3.6`
+    * `3.8`, `3.7`
 * Tagged but no further updates (no new upstream tags in the last 6 months):
-    * `3.5`, `3.4`, `3.3`, `3.2`, `3.1`, `3.0`
+    * `3.6`, `3.5`, `3.4`, `3.3`, `3.2`, `3.1`, `3.0`
 
 I've found that the Grafana images published in the [grafana/grafana](https://hub.docker.com/r/grafana/grafana/) and [grafana/grafana-image-renderer](https://hub.docker.com/r/grafana/grafana-image-renderer/) repositories on Docker Hub only have specific tags (e.g. - there are no `major.minor` tags) which makes it a pain to stay up to date on the latest bugfix versions.  [These scripts](https://github.com/mbentley/docker-grafana) will run daily to just create manifest tags for the `linux/amd64` images by querying for the latest tag from GitHub, parsing it, and writing manifests with the `major.minor` version only.
 
