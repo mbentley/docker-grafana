@@ -3,7 +3,7 @@
 set -e
 
 # set expected major.minor tags
-EXPECTED_TAGS="3.7 3.8 3.9"
+EXPECTED_TAGS="3.8 3.9 3.10"
 
 tag_manifest() {
   # get expected tag from first argument
