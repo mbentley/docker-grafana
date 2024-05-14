@@ -76,8 +76,8 @@ tag_manifest() {
   echo -e "done\n"
 }
 
-# get last 100 release tags from GitHub; filter out beta releases & only v8, v9, or v10
-GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana/tags?per_page=100" | jq -r '.[] | select(.name | contains("-") | not) | select((.name | startswith("v8")) or (.name | startswith("v9")) or (.name | startswith("v10"))) | .name' | sort --version-sort -r)"
+# get last 100 release tags from GitHub; filter out beta releases & only v9, v10, or v11
+GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana/tags?per_page=100" | jq -r '.[] | select(.name | contains("-") | not) | select((.name | startswith("v9")) or (.name | startswith("v10")) or (.name | startswith("v11"))) | .name' | sort --version-sort -r)"
 
 # load env_parallel
 . "$(command -v env_parallel.bash)"
