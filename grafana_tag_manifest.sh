@@ -8,9 +8,19 @@ EXPECTED_MAJOR_MINOR_TAGS="9.5 10.0 10.1 10.2 10.3 10.4 11.0"
 # set expected major tags from the major.minor list
 EXPECTED_MAJOR_TAGS="$(echo "${EXPECTED_MAJOR_MINOR_TAGS}" | tr " " "\n" | awk -F '.' '{print $1}' | sort -nu | xargs)"
 
+# combine list of all expected tags
+ALL_EXPECTED_TAGS="${EXPECTED_MAJOR_MINOR_TAGS} ${EXPECTED_MAJOR_TAGS}"
+
 tag_manifest() {
   # get expected tag from first argument
   EXPECTED_TAG="${1}"
+
+  # test if major.minor or just major
+  if ! echo "${EXPECTED_TAG}" | grep -q '\.'
+  then
+    # major only; set variable
+    MAJOR_ONLY=true
+  fi
 
   # get latest full version from GitHub releases
   echo -n "Getting full version for ${EXPECTED_TAG} from GitHub releases..."
@@ -94,9 +104,4 @@ GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana/t
 
 # run multiple tags in parallel
 # shellcheck disable=SC2086
-env_parallel -j 4 tag_manifest ::: ${EXPECTED_MAJOR_MINOR_TAGS}
-
-# run multiple tags in parallel
-export MAJOR_ONLY=true
-# shellcheck disable=SC2086
-env_parallel -j 4 tag_manifest ::: ${EXPECTED_MAJOR_TAGS}
+env_parallel -j 4 tag_manifest ::: ${ALL_EXPECTED_TAGS}
