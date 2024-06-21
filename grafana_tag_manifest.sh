@@ -3,7 +3,10 @@
 set -e
 
 # set expected major.minor tags
-EXPECTED_TAGS="9.5 10.0 10.1 10.2 10.3 10.4 11.0"
+EXPECTED_MAJOR_MINOR_TAGS="9.5 10.0 10.1 10.2 10.3 10.4 11.0"
+
+# set expected major tags from the major.minor list
+EXPECTED_MAJOR_TAGS="$(echo "${EXPECTED_MAJOR_MINOR_TAGS}" | tr " " "\n" | awk -F '.' '{print $1}' | sort -nu | xargs)"
 
 tag_manifest() {
   # get expected tag from first argument
@@ -52,18 +55,25 @@ tag_manifest() {
 
   echo "done"
 
-  # get the target tag we want to use
-  MAJOR_MINOR_TAG="$(echo "${GRAFANA_VERSION}" | awk -F 'v' '{print $2}' | awk -F '.' '{print $1"."$2}')"
+  # see if we want a MAJOR.MINOR or just MAJOR tag
+  if [ "${MAJOR_ONLY}" = "true" ]
+  then
+    # major only; get the destination tag we want to use
+    DESTINATION_TAG="$(echo "${GRAFANA_VERSION}" | awk -F 'v' '{print $2}' | awk -F '.' '{print $1}')"
+  else
+    # major.minor; get the destination tag we want to use
+    DESTINATION_TAG="$(echo "${GRAFANA_VERSION}" | awk -F 'v' '{print $2}' | awk -F '.' '{print $1"."$2}')"
+  fi
 
   # check to see if we got a tag digest
-  if [ -z "${MAJOR_MINOR_TAG}" ]
+  if [ -z "${DESTINATION_TAG}" ]
   then
-    echo -e "ERROR: MAJOR_MINOR_TAG not set!\n"
+    echo -e "ERROR: DESTINATION_TAG not set!\n"
     exit 1
   fi
 
   # check to see if the major.minor tag is no longer the value of EXPECTED_TAG
-  if [ "${MAJOR_MINOR_TAG}" != "${EXPECTED_TAG}" ]
+  if [ "${DESTINATION_TAG}" != "${EXPECTED_TAG}" ]
   then
     echo -e "ERROR: the major.minor tag is no longer ${EXPECTED_TAG}; we found ${TRIMMED_TAG}!\n"
     exit 1
@@ -71,7 +81,7 @@ tag_manifest() {
 
   # create the new manifest and push the manifest to docker hub
   echo -n "Create new manifest and push to Docker Hub..."
-  docker buildx imagetools create --progress plain -t "mbentley/grafana:${MAJOR_MINOR_TAG}" "grafana/grafana@${TAG_DIGEST}"
+  docker buildx imagetools create --progress plain -t "mbentley/grafana:${DESTINATION_TAG}" "grafana/grafana@${TAG_DIGEST}"
 
   echo -e "done\n"
 }
@@ -82,6 +92,11 @@ GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana/t
 # load env_parallel
 . "$(command -v env_parallel.bash)"
 
-# run multiple scans in parallel
+# run multiple tags in parallel
 # shellcheck disable=SC2086
-env_parallel -j 4 tag_manifest ::: ${EXPECTED_TAGS}
+env_parallel -j 4 tag_manifest ::: ${EXPECTED_MAJOR_MINOR_TAGS}
+
+# run multiple tags in parallel
+export MAJOR_ONLY=true
+# shellcheck disable=SC2086
+env_parallel -j 4 tag_manifest ::: ${EXPECTED_MAJOR_TAGS}
