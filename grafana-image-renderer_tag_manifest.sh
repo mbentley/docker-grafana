@@ -12,6 +12,9 @@ EXPECTED_MAJOR_TAGS="$(echo "${EXPECTED_MAJOR_MINOR_TAGS}" | tr " " "\n" | awk -
 ALL_EXPECTED_TAGS="${EXPECTED_MAJOR_MINOR_TAGS} ${EXPECTED_MAJOR_TAGS}"
 
 tag_manifest() {
+  # set this again for use in parallel
+  set -e
+
   # get expected tag from first argument
   EXPECTED_TAG="${1}"
 
@@ -92,4 +95,4 @@ GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-i
 
 # run multiple tags in parallel
 # shellcheck disable=SC2086
-env_parallel -j 4 tag_manifest ::: ${ALL_EXPECTED_TAGS}
+env_parallel --halt soon,fail=1 -j 4 tag_manifest ::: ${ALL_EXPECTED_TAGS}
