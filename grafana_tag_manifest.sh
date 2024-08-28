@@ -3,7 +3,7 @@
 set -e
 
 # set expected major.minor tags
-EXPECTED_MAJOR_MINOR_TAGS="9.5 10.0 10.1 10.2 10.3 10.4 11.0"
+EXPECTED_MAJOR_MINOR_TAGS="9.5 10.0 10.1 10.2 10.3 10.4 11.0 11.1 11.2"
 
 # set expected major tags from the major.minor list
 EXPECTED_MAJOR_TAGS="$(echo "${EXPECTED_MAJOR_MINOR_TAGS}" | tr " " "\n" | awk -F '.' '{print $1}' | sort -nu | xargs)"
