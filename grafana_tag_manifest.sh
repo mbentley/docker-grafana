@@ -3,7 +3,7 @@
 set -e
 
 # set expected major.minor tags
-EXPECTED_MAJOR_MINOR_TAGS="10.4 11.0 11.1 11.2 11.3 11.4 11.5 11.6"
+EXPECTED_MAJOR_MINOR_TAGS="10.4 11.0 11.1 11.2 11.3 11.4 11.5 11.6 12.0"
 
 # set expected major tags from the major.minor list
 EXPECTED_MAJOR_TAGS="$(echo "${EXPECTED_MAJOR_MINOR_TAGS}" | tr " " "\n" | awk -F '.' '{print $1}' | sort -nu | xargs)"
@@ -99,13 +99,13 @@ tag_manifest() {
   echo -e "done\n"
 }
 
-# get last 200 release tags from GitHub; filter out beta releases & only v9, v10, or v11
-GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana/tags?per_page=100&page=1" | jq -r '.[] | select(.name | contains("-") | not) | select((.name | startswith("v9")) or (.name | startswith("v10")) or (.name | startswith("v11"))) | .name' | sort --version-sort -r; \
-wget -q -O - "https://api.github.com/repos/grafana/grafana/tags?per_page=100" | jq -r '.[] | select(.name | contains("-") | not) | select((.name | startswith("v9")) or (.name | startswith("v10")) or (.name | startswith("v11"))) | .name' | sort --version-sort -r; wget -q -O - "https://api.github.com/repos/grafana/grafana/tags?per_page=100&page=2" | jq -r '.[] | select(.name | contains("-") | not) | select((.name | startswith("v9")) or (.name | startswith("v10")) or (.name | startswith("v11"))) | .name' | sort --version-sort -r)')"
+# get last 200 release tags from GitHub; filter out beta releases & only v10, v11, or v12
+GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana/tags?per_page=100&page=1" | jq -r '.[] | select(.name | contains("-") | not) | select((.name | startswith("v10")) or (.name | startswith("v11")) or (.name | startswith("v12"))) | .name' | sort --version-sort -r; \
+wget -q -O - "https://api.github.com/repos/grafana/grafana/tags?per_page=100" | jq -r '.[] | select(.name | contains("-") | not) | select((.name | startswith("v10")) or (.name | startswith("v11")) or (.name | startswith("v12"))) | .name' | sort --version-sort -r; wget -q -O - "https://api.github.com/repos/grafana/grafana/tags?per_page=100&page=2" | jq -r '.[] | select(.name | contains("-") | not) | select((.name | startswith("v10")) or (.name | startswith("v11")) or (.name | startswith("v12"))) | .name' | sort --version-sort -r)')"
 
 # load env_parallel
 . "$(command -v env_parallel.bash)"
 
 # run multiple tags in parallel
 # shellcheck disable=SC2086
-env_parallel --halt soon,fail=1 -j 4 tag_manifest ::: ${ALL_EXPECTED_TAGS}
+env_parallel --env tag_manifest --env GRAFANA_RELEASES --env ALL_EXPECTED_TAGS --halt soon,fail=1 -j 4 tag_manifest ::: ${ALL_EXPECTED_TAGS}
