@@ -95,4 +95,4 @@ GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-i
 
 # run multiple tags in parallel
 # shellcheck disable=SC2086
-env_parallel --halt soon,fail=1 -j 4 tag_manifest ::: ${ALL_EXPECTED_TAGS}
+env_parallel --env tag_manifest --env GRAFANA_RELEASES --env ALL_EXPECTED_TAGS --halt soon,fail=1 -j 4 tag_manifest ::: ${ALL_EXPECTED_TAGS}
