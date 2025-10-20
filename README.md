@@ -16,8 +16,8 @@ docker image for Grafana & Grafana image renderer; direct mirrors of `grafana/gr
 ### `mbentley/grafana-image-renderer`
 
 * Daily updates:
-    * `4`, `4.0`
-    * `3`, `3.12`
+    * `4.1`, `4.0`, `3.12`
+    * `4`, `3`
 * Tagged but no further updates (no new upstream tags in the last 6 months):
     * `3.11`, `3.10`, `3.9`, `3.8`, `3.7`, `3.6`, `3.5`, `3.4`, `3.3`, `3.2`, `3.1`, `3.0`
 
