@@ -82,7 +82,7 @@ tag_manifest() {
   # create the new manifest and push the manifest to docker hub
   echo -n "Create new manifest and push to Docker Hub..."
   case $(echo "${TRIMMED_TAG}"  | awk -F '.' '{print $1}') in
-    4)
+    4|5)
       docker buildx imagetools create --progress plain -t "mbentley/grafana-image-renderer:${DESTINATION_TAG}" "grafana/grafana-image-renderer:v${TRIMMED_TAG}"
       ;;
     3)
