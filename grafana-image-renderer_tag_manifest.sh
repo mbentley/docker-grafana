@@ -3,7 +3,7 @@
 set -e
 
 # set expected major.minor tags
-EXPECTED_MAJOR_MINOR_TAGS="3.12 4.0 4.1"
+EXPECTED_MAJOR_MINOR_TAGS="3.12 4.0 4.1 5.0"
 
 # set expected major tags from the major.minor list
 EXPECTED_MAJOR_TAGS="$(echo "${EXPECTED_MAJOR_MINOR_TAGS}" | tr " " "\n" | awk -F '.' '{print $1}' | sort -nu | xargs)"
@@ -99,8 +99,7 @@ tag_manifest() {
 
 
 # get last 100 release tags from GitHub; filter out beta releases
-#GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-image-renderer/tags?per_page=100" | jq -r '.[] | select(.name | contains("-") | not) | select(.name | startswith("v3")) | .name' | sort --version-sort -r)"
-GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-image-renderer/tags?per_page=100" | jq -r '.[] | select(.name | contains("-") | not) | select(.name | (startswith("v3")) or (startswith("v4"))  ) | .name' | sort --version-sort -r)"
+GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-image-renderer/tags?per_page=100" | jq -r '.[] | select(.name | contains("-") | not) | select(.name | (startswith("v3")) or (startswith("v4")) or (startswith("v5")) ) | .name' | sort --version-sort -r)"
 
 # load env_parallel
 . "$(command -v env_parallel.bash)"
