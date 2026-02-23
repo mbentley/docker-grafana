@@ -6,19 +6,26 @@ docker image for Grafana & Grafana image renderer; direct mirrors of `grafana/gr
 
 ### `mbentley/grafana`
 
+> [!NOTE]
+> Tags are updated approximately according to the [EOL dates](https://endoflife.date/grafana).
+
 * Daily updates:
-    * `12.2`, `12.1`, `12.0`, `11.6,`, `11.5`, `11.4`, `11.3`, `11.2`, `11.1`, `11.0`, `10.4`
-    * `12`, `11`, `10`
-* Tagged but no further updates (no new upstream tags in about the last 6 months):
-    * `10.3`, `10.2`, `10.1`, `10.0`, `9.5`, `9.4`, `9.3`, `9.2`, `9.1`, `9.0`, `8.5`, `8.4`, `8.3`, `8.2`, `8.1`, `8.0`
-    * `9`
+    * `12.3`, `12.2`, `12.1`, `11.6`
+    * `12`, `11`
+* Tagged but no further updates (no longer supported):
+    * `12.0`
+    * `11.5`, `11.4`, `11.3`, `11.2`, `11.1`, `11.0`
+    * `10.4`, `10.3`, `10.2`, `10.1`, `10.0`
+    * `9.5`, `9.4`, `9.3`, `9.2`, `9.1`, `9.0`
+    * `8.5`, `8.4`, `8.3`, `8.2`, `8.1`, `8.0`
+    * `10`, `9`, `8`
 
 ### `mbentley/grafana-image-renderer`
 
 * Daily updates:
-    * `5` - `5.5`, `5.4`, `5.3`, `5.2`
+    * `5` - `5.6`
 * Tagged but no further updates (no new upstream tags are being made):
-    * `5.1`, `5.0`
+    * `5.5`, `5.4`, `5.3`, `5.2`, `5.1`, `5.0`
     * `4` - `4.1`, `4.0`
     * `3` - `3.12`, `3.11`, `3.10`, `3.9`, `3.8`, `3.7`, `3.6`, `3.5`, `3.4`, `3.3`, `3.2`, `3.1`, `3.0`
 
