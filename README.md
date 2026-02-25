@@ -10,7 +10,7 @@ docker image for Grafana & Grafana image renderer; direct mirrors of `grafana/gr
 > Tags are updated approximately according to the [EOL dates](https://endoflife.date/grafana).
 
 * Daily updates:
-    * `12.3`, `12.2`, `12.1`, `11.6`
+    * `12.4`, `12.3`, `12.2`, `12.1`, `11.6`
     * `12`, `11`
 * Tagged but no further updates (no longer supported):
     * `12.0`
