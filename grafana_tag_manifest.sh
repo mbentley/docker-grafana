@@ -99,9 +99,8 @@ tag_manifest() {
   echo -e "done\n"
 }
 
-# get last 200 release tags from GitHub; filter out beta releases & only v10, v11, or v12
-GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana/tags?per_page=100&page=1" | jq -r '.[] | select(.name | contains("-") | not) | select((.name | startswith("v10")) or (.name | startswith("v11")) or (.name | startswith("v12"))) | .name' | sort --version-sort -r; \
-wget -q -O - "https://api.github.com/repos/grafana/grafana/tags?per_page=100" | jq -r '.[] | select(.name | contains("-") | not) | select((.name | startswith("v10")) or (.name | startswith("v11")) or (.name | startswith("v12"))) | .name' | sort --version-sort -r; wget -q -O - "https://api.github.com/repos/grafana/grafana/tags?per_page=100&page=2" | jq -r '.[] | select(.name | contains("-") | not) | select((.name | startswith("v10")) or (.name | startswith("v11")) or (.name | startswith("v12"))) | .name' | sort --version-sort -r)')"
+# get last 200 release tags from GitHub; filter out beta releases & only v11, v12, or v13
+GRAFANA_RELEASES="$(for PAGE in 1 2; do wget -q -O - "https://api.github.com/repos/grafana/grafana/tags?per_page=100&page=${PAGE}" | jq -r '.[] | select(.name | contains("-") | not) | select((.name | startswith("v11")) or (.name | startswith("v12")) or (.name | startswith("v13"))) | .name' | sort --version-sort -r; done)"
 
 # load env_parallel
 . "$(command -v env_parallel.bash)"
