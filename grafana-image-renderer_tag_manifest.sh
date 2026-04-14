@@ -98,8 +98,8 @@ tag_manifest() {
 }
 
 
-# get last 100 release tags from GitHub; filter out beta releases
-GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-image-renderer/tags?per_page=100" | jq -r '.[] | select(.name | contains("-") | not) | select(.name | (startswith("v3")) or (startswith("v4")) or (startswith("v5")) ) | .name' | sort --version-sort -r)"
+# get last 100 release tags from GitHub; filter out beta releases & get only v5
+GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-image-renderer/tags?per_page=100" | jq -r '.[] | select(.name | contains("-") | not) | select(.name | startswith("v5") ) | .name' | sort --version-sort -r)"
 
 # load env_parallel
 . "$(command -v env_parallel.bash)"
