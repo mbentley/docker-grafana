@@ -2,8 +2,18 @@
 
 set -e
 
-# set expected major.minor tags
-EXPECTED_MAJOR_MINOR_TAGS="5.11"
+# get last 100 release tags from GitHub; filter out beta releases & get only v5
+GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-image-renderer/tags?per_page=100" | jq -r '.[] | select(.name | contains("-") | not) | select(.name | startswith("v5") ) | .name' | sort --version-sort -r)"
+
+# set expected major.minor tags to the latest release found on GitHub
+EXPECTED_MAJOR_MINOR_TAGS="$(echo "${GRAFANA_RELEASES}" | head -n 1 | sed 's/^v//' | awk -F '.' '{print $1"."$2}')"
+
+# check to see if we got an expected major.minor tag
+if [ -z "${EXPECTED_MAJOR_MINOR_TAGS}" ]
+then
+  echo -e "ERROR: unable to determine the latest major.minor tag from GitHub releases\n"
+  exit 1
+fi
 
 # set expected major tags from the major.minor list
 EXPECTED_MAJOR_TAGS="$(echo "${EXPECTED_MAJOR_MINOR_TAGS}" | tr " " "\n" | awk -F '.' '{print $1}' | sort -nu | xargs)"
@@ -96,11 +106,6 @@ tag_manifest() {
 
   echo -e "done\n"
 }
-
-
-# get last 100 release tags from GitHub; filter out beta releases & get only v5
-GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-image-renderer/tags?per_page=100" | jq -r '.[] | select(.name | contains("-") | not) | select(.name | startswith("v5") ) | .name' | sort --version-sort -r)"
-#GRAFANA_RELEASES="$(wget -q -O - "https://api.github.com/repos/grafana/grafana-image-renderer/releases?per_page=50" | jq -r '.[] | select(.name | contains("-") | not) | select(.name | startswith("v5") ) | .name' | sort --version-sort -r)"
 
 # load env_parallel
 . "$(command -v env_parallel.bash)"

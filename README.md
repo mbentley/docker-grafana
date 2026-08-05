@@ -20,17 +20,21 @@ docker image for Grafana & Grafana image renderer; direct mirrors of `grafana/gr
 
 ### `mbentley/grafana-image-renderer`
 
+The `grafana-image-renderer_tag_manifest.sh` script automatically determines the latest `major.minor` version so it will update as soon as a new version is released.  There will be daily updates to the `major` tag which will correspond to the latest major release and to the latest `major.minor`.  All other previous `major.minor` tags will not get further updates as the Grafana Image Renderer doesn't backport anything to previous versions.
+
 * Daily updates:
-    * `5` - `5.11`
-* Tagged but no further updates (no new upstream tags are being made):
-    * `5.10`, `5.9`, `5.8`, `5.7`, `5.6`, `5.5`, `5.4`, `5.3`, `5.2`, `5.1`, `5.0`
-    * `4` - `4.1`, `4.0`
-    * `3` - `3.12`, `3.11`, `3.10`, `3.9`, `3.8`, `3.7`, `3.6`, `3.5`, `3.4`, `3.3`, `3.2`, `3.1`, `3.0`
+    * `5` - `5.x`
+
+> [!NOTE]
+> For a list of the latest releases from Grafana for the Image Renderer, see the releases page for [github.com/grafana/grafana-image-renderer](https://github.com/grafana/grafana-image-renderer/releases).
+>
+> For all image tags, see the [Docker Hub tag listing for `mbentley/grafana-image-renderer`](https://hub.docker.com/r/mbentley/grafana-image-renderer/tags).
 
 I've found that the Grafana image renderer container images published in the [grafana/grafana-image-renderer](https://hub.docker.com/r/grafana/grafana-image-renderer/) repository on Docker Hub only has specific tags (e.g. - there are no `major.minor` tags) which makes it a pain to stay up to date on the latest bugfix versions.  [These scripts](https://github.com/mbentley/docker-grafana) will run daily to just create manifest tags for the `linux/amd64` images by querying for the latest tag from GitHub, parsing it, and writing manifests with the `major.minor` version only.
 
-This allows for using the `major.minor` versions so that you'll always have the latest bugfix versions, such as:
+This allows for using either the `major` or `major.minor` versions so that you'll always have the latest bugfix versions, such as:
 
+* `mbentley/grafana-image-renderer:3` is a manifest pointing `grafana/grafana-image-renderer:3.2.0`
 * `mbentley/grafana-image-renderer:3.2` is a manifest pointing `grafana/grafana-image-renderer:3.2.0`
 
-These manifests always use the same image digest as the newest bugfix versions available for each. If grafana starts doing major.minor tags, I'll stop maintaining these.
+These manifests always use the same image digest as the newest bugfix versions available for each.
